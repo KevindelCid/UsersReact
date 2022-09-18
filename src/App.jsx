@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Users from "./components/Users";
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 import "./style.css";
 
 function App() {
@@ -33,6 +34,13 @@ function App() {
       }
       case "post": {
         axios.post(url, data).then(() => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "You added a new user",
+            showConfirmButton: false,
+            timer: 1500,
+          });
           apiUsers("https://users-crud1.herokuapp.com/users/");
         });
         break;
@@ -41,15 +49,63 @@ function App() {
         axios
           .put(url, data)
           .then(() => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "You modified a user",
+              showConfirmButton: false,
+              timer: 1500,
+            });
             apiUsers("https://users-crud1.herokuapp.com/users/");
           })
           .catch((error) => console.log(error.response));
         break;
       }
       case "delete": {
-        axios.delete(url).then(() => {
-          apiUsers("https://users-crud1.herokuapp.com/users/");
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
         });
+
+        swalWithBootstrapButtons
+          .fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true,
+          })
+          .then((result) => {
+            if (result.isConfirmed) {
+              axios
+                .delete(url)
+                .then(() => {
+                  apiUsers("https://users-crud1.herokuapp.com/users/");
+                })
+                .then(() => {
+                  swalWithBootstrapButtons.fire(
+                    "Deleted!",
+                    "The user has been deleted.",
+                    "success"
+                  );
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              clear();
+              setIsVisible(!isVisible);
+              apiUsers("https://users-crud1.herokuapp.com/users/");
+              swalWithBootstrapButtons.fire(
+                "Cancelled",
+                "Your imaginary user is safe :)",
+                "error"
+              );
+            }
+          });
+
         break;
       }
     }
@@ -62,7 +118,8 @@ function App() {
   };
 
   return (
-    <div className="">
+    <div className="general-container">
+      <h1>Users</h1>
       {isVisible ? (
         <div className="background-create-user">
           <div className="card-form">

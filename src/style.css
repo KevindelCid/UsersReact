@@ -349,6 +349,15 @@ li {
   font-weight: lighter;
 }
 
-
-
-
+.general-container {
+  max-width: 1650px;
+  margin: 0 auto;
+}
+h1 {
+  text-align: center;
+  padding: 40px;
+}
+/* .swal2-popup {
+  top: 35vh;
+  margin: 0 auto;
+} */
