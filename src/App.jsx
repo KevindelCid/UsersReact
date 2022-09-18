@@ -96,7 +96,7 @@ function App() {
                 });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
               clear();
-              setIsVisible(!isVisible);
+
               apiUsers("https://users-crud1.herokuapp.com/users/");
               swalWithBootstrapButtons.fire(
                 "Cancelled",
