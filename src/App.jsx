@@ -118,8 +118,7 @@ function App() {
   };
 
   return (
-    <div className="general-container">
-      <h1>Users</h1>
+    <>
       {isVisible ? (
         <div className="background-create-user">
           <div className="card-form">
@@ -192,13 +191,16 @@ function App() {
           </button>
         </div>
       )}
+      <div className="general-container">
+        <h1>Users</h1>
 
-      <ul className="card-user-ul">
-        {users.map((user) => (
-          <Users user={user} apiUsers={apiUsers} key={user.id} />
-        ))}
-      </ul>
-    </div>
+        <ul className="card-user-ul">
+          {users.map((user) => (
+            <Users user={user} apiUsers={apiUsers} key={user.id} />
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }
 
